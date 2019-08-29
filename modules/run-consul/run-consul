@@ -181,7 +181,7 @@ function get_cluster_size {
       log_warn "This EC2 Instance does not appear to be part of an Auto Scaling Group, so cannot determine cluster size. Setting cluster size to 1."
       echo 1
     else
-      spotings_group=$(curl -H "Authorization: Bearer $SPOTINST_TOKEN" https://api.spotinst.io/aws/ec2/group/$(get_tag_value "$instance_tags" "spotinst:aws:ec2:group:id")?accountId=$SPOTINST_ACCOUNT_ID)
+      spotings_group=$(curl --silent --show-error -H "Authorization: Bearer $SPOTINST_TOKEN" https://api.spotinst.io/aws/ec2/group/$(get_tag_value "$instance_tags" "spotinst:aws:ec2:group:id")?accountId=$SPOTINST_ACCOUNT_ID)
       spotinst_target=$(echo $spotings_group | jq ".response.items[0].capacity.target")
       log_warn "Spotinst Target $spotinst_target"
       echo $spotinst_target
